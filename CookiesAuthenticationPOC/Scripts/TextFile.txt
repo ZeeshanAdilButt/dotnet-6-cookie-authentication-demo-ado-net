@@ -1,0 +1,42 @@
+﻿CREATE DATABASE CookiesAuth;
+
+USE [CookiesAuth]
+GO
+
+
+
+CREATE TABLE Members (
+    UserId UNIQUEIDENTIFIER DEFAULT NEWID() PRIMARY KEY,
+    Email varchar(255) NOT NULL,
+    Password varbinary(max)  NOT NULL,
+
+); 
+
+-- insert into Members(Email,Password) Values ('zee2@outlook.com' , (select HashBytes('SHA1', 'testpass')))
+
+
+-- Create Procedure
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE usp_AuthenticateUser
+	@Email varchar(255),
+	@Password varchar(255)
+AS
+BEGIN
+	SELECT UserID FROM Members m
+	WHERE
+	m.Email = @Email AND
+	m.Password = (select HashBytes('SHA1', @Password))
+END
+GO
+
+
+
